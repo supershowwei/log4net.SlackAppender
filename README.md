@@ -12,7 +12,7 @@ Send log to Slack.
       <conversionPattern value="%type{1}.%method%newline%message" />
     </layout>
     <filter type="log4net.Filter.LevelRangeFilter">
-      <levelMin value="WARN"/>
+      <levelMin value="NOTICE"/>
       <levelMax value="ERROR"/>
     </filter>
   </appender>
