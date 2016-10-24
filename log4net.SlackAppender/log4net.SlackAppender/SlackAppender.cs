@@ -25,7 +25,7 @@ namespace log4net.Appender
                     payload,
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
 
-            await client.ExecuteTaskAsync(request);
+            client.Execute(request);
         }
 
         private static string GetColor(Level level)
