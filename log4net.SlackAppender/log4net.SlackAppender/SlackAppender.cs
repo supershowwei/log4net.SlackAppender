@@ -11,7 +11,7 @@ namespace log4net.Appender
     {
         public string WebhookUrl { get; set; }
 
-        protected override async void Append(LoggingEvent loggingEvent)
+        protected override void Append(LoggingEvent loggingEvent)
         {
             var client = new RestClient(this.WebhookUrl);
 
@@ -48,9 +48,9 @@ namespace log4net.Appender
                        {
                            Username =
                                string.Format(
-                                   "{0} - {1}",
-                                   GlobalContext.Properties["ApplicationName"],
-                                   loggingEvent.LoggerName),
+                                   "{0}.{1}",
+                                   GlobalContext.Properties["log4net:HostName"],
+                                   GlobalContext.Properties["ApplicationName"]),
                            Fallback = string.Format("Occurs {0}", loggingEvent.Level.DisplayName),
                            Color = GetColor(loggingEvent.Level),
                            Fields =
@@ -58,7 +58,11 @@ namespace log4net.Appender
                                    {
                                        new Field
                                            {
-                                               Title = loggingEvent.Level.DisplayName,
+                                               Title =
+                                                   string.Format(
+                                                       "{0} in {1}",
+                                                       loggingEvent.Level.DisplayName,
+                                                       loggingEvent.LoggerName),
                                                Value = this.RenderLoggingEvent(loggingEvent),
                                                Short = false
                                            }
