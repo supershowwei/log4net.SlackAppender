@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender", "log4net.SlackAppender\log4net.SlackAppender.csproj", "{DE6EA95C-0151-43CD-B6FE-E63FC4904A69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net451", "log4net.SlackAppender.Net451\log4net.SlackAppender.Net451.csproj", "{DCEB8AE0-A5BA-4DA6-A58E-D084332BCBD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DE6EA95C-0151-43CD-B6FE-E63FC4904A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE6EA95C-0151-43CD-B6FE-E63FC4904A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE6EA95C-0151-43CD-B6FE-E63FC4904A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEB8AE0-A5BA-4DA6-A58E-D084332BCBD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEB8AE0-A5BA-4DA6-A58E-D084332BCBD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCEB8AE0-A5BA-4DA6-A58E-D084332BCBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEB8AE0-A5BA-4DA6-A58E-D084332BCBD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
