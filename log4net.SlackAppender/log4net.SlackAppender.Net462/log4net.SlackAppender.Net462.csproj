@@ -7,8 +7,8 @@
     <ProjectGuid>{9F91F718-1BC5-41CE-B27D-03BF9C79FD50}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>log4net.SlackAppender.Net462</RootNamespace>
-    <AssemblyName>log4net.SlackAppender.Net462</AssemblyName>
+    <RootNamespace>log4net.SlackAppender</RootNamespace>
+    <AssemblyName>log4net.SlackAppender</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
