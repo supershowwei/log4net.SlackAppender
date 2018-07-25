@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net45
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net462", "log4net.SlackAppender.Net462\log4net.SlackAppender.Net462.csproj", "{9F91F718-1BC5-41CE-B27D-03BF9C79FD50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net452", "log4net.SlackAppender.Net452\log4net.SlackAppender.Net452.csproj", "{C53D5E80-491F-40B4-939E-4F43B8CD6BAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net472", "log4net.SlackAppender.Net472\log4net.SlackAppender.Net472.csproj", "{342043B3-8F74-4289-9225-8DA5148359C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,19 @@ Global
 		{9F91F718-1BC5-41CE-B27D-03BF9C79FD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F91F718-1BC5-41CE-B27D-03BF9C79FD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F91F718-1BC5-41CE-B27D-03BF9C79FD50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C53D5E80-491F-40B4-939E-4F43B8CD6BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53D5E80-491F-40B4-939E-4F43B8CD6BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53D5E80-491F-40B4-939E-4F43B8CD6BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53D5E80-491F-40B4-939E-4F43B8CD6BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{342043B3-8F74-4289-9225-8DA5148359C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{342043B3-8F74-4289-9225-8DA5148359C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{342043B3-8F74-4289-9225-8DA5148359C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{342043B3-8F74-4289-9225-8DA5148359C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2273BC6-D9A0-4232-BCB0-E9D6C3D6B8C2}
 	EndGlobalSection
 EndGlobal
