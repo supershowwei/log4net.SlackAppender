@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using log4net.Core;
 using log4net.SlackAppender;
 using Newtonsoft.Json;
@@ -9,65 +10,72 @@ namespace log4net.Appender
 {
     public class SlackAppender : AppenderSkeleton
     {
-        public string WebhookUrl { get; set; }
+        private static readonly Uri ApiUri = new Uri("https://slack.com/api/chat.postMessage");
+
+        private static readonly JsonSerializerSettings SlackJsonSettings = new JsonSerializerSettings
+                                                                           {
+                                                                               ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                                                                               NullValueHandling = NullValueHandling.Ignore
+                                                                           };
+
+        public string Token { get; set; }
+
+        public string Channel { get; set; }
 
         protected override void Append(LoggingEvent loggingEvent)
         {
-            var client = new RestClient(this.WebhookUrl);
+            var client = new RestClient(ApiUri.GetLeftPart(UriPartial.Authority));
 
-            var request = new RestRequest(Method.POST);
+            var request = new RestRequest(ApiUri.PathAndQuery, Method.POST);
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddHeader("Authorization", $"Bearer {this.Token}");
 
             var payload = this.GeneratePayload(loggingEvent);
 
-            request.AddParameter(
-                "payload",
-                JsonConvert.SerializeObject(
-                    payload,
-                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+            request.AddParameter("application/json; charset=utf-8", JsonConvert.SerializeObject(payload, SlackJsonSettings), ParameterType.RequestBody);
 
             client.Execute(request);
         }
 
-        private static string GetColor(Level level)
+        private static string GetEmoji(Level level)
         {
             switch (level.DisplayName.ToLowerInvariant())
             {
-                case "warn":
-                    return "warning";
-                case "error":
-                case "fatal":
-                    return "danger";
-                default:
-                    return "good";
+                case "warn": return ":warning:";
+                case "error": return ":rotating_light:";
+                case "fatal": return ":fire:";
+                default: return ":information_source:";
             }
         }
 
         private Payload GeneratePayload(LoggingEvent loggingEvent)
         {
+            var emoji = GetEmoji(loggingEvent.Level);
+            var renderedMessage = this.RenderLoggingEvent(loggingEvent);
+
             return new Payload
-                       {
-                           Username =
-                               string.Format(
-                                   "{0}.{1}",
-                                   GlobalContext.Properties["log4net:HostName"],
-                                   GlobalContext.Properties["ApplicationName"]),
-                           Fallback = string.Format("Occurs {0}", loggingEvent.Level.DisplayName),
-                           Color = GetColor(loggingEvent.Level),
-                           Fields =
-                               new List<Field>
-                                   {
-                                       new Field
-                                           {
-                                               Title =
-                                                   string.Format(
-                                                       "{0} in {1}",
-                                                       loggingEvent.Level.DisplayName,
-                                                       loggingEvent.LoggerName),
-                                               Value = this.RenderLoggingEvent(loggingEvent),
-                                               Short = false
-                                           }
-                                   }
-                       };
+                   {
+                       Channel = this.Channel,
+                       Username = $"{GlobalContext.Properties["log4net:HostName"]}.{GlobalContext.Properties["ApplicationName"]}",
+                       Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}\n{renderedMessage.Left(100)}",
+                       Blocks = new List<Payload.Block>
+                                {
+                                    new Payload.Block
+                                    {
+                                        Type = "header",
+                                        Text = new Payload.TextObject
+                                               {
+                                                   Type = "plain_text",
+                                                   Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}"
+                                               }
+                                    },
+                                    new Payload.Block
+                                    {
+                                        Type = "section",
+                                        Text = new Payload.TextObject { Type = "mrkdwn", Text = $"```\n{renderedMessage}\n```" }
+                                    }
+                                }
+                   };
         }
     }
 }
