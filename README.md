@@ -7,7 +7,8 @@ Send log to Slack.
 ```xml
 <log4net>
   <appender name="SlackAppender" type="log4net.Appender.SlackAppender, log4net.SlackAppender">
-    <webhookUrl>{Your WebhookUrl}</webhookUrl>
+    <token>{OAuth Token}</token>
+    <channel>{Channel ID}</channel>
     <layout type="log4net.Layout.PatternLayout">
       <conversionPattern value="%type{1}.%method%newline%message" />
     </layout>

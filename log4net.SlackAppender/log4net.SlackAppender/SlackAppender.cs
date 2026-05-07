@@ -57,7 +57,7 @@ namespace log4net.Appender
                    {
                        Channel = this.Channel,
                        Username = $"{GlobalContext.Properties["log4net:HostName"]}.{GlobalContext.Properties["ApplicationName"]}",
-                       Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}\n{renderedMessage.Left(100)}",
+                       Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}\n{renderedMessage.SmsTruncate()}",
                        Blocks = new List<Payload.Block>
                                 {
                                     new Payload.Block

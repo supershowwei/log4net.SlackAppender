@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>log4net.SlackAppender</AssemblyName>
+    <RootNamespace>log4net.SlackAppender</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\log4net.SlackAppender\Extension.cs" Link="Extension.cs" />
+    <Compile Include="..\log4net.SlackAppender\Payload.cs" Link="Payload.cs" />
+    <Compile Include="..\log4net.SlackAppender\SlackAppender.cs" Link="SlackAppender.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
+  </ItemGroup>
+
+</Project>
