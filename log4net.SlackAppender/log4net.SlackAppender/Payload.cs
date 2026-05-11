@@ -12,9 +12,13 @@ namespace log4net.Appender
 
         public List<Block> Blocks { get; set; }
 
-        internal class Block
+        internal abstract class Block
         {
-            public string Type { get; set; }
+        }
+
+        internal class HeaderBlock : Block
+        {
+            public string Type => "header";
 
             public TextObject Text { get; set; }
         }
@@ -22,6 +26,13 @@ namespace log4net.Appender
         internal class TextObject
         {
             public string Type { get; set; }
+
+            public string Text { get; set; }
+        }
+
+        internal class MarkdownBlock : Block
+        {
+            public string Type => "markdown";
 
             public string Text { get; set; }
         }

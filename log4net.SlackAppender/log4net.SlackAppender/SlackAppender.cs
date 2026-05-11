@@ -60,20 +60,15 @@ namespace log4net.Appender
                        Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}\n{renderedMessage.SmsTruncate()}",
                        Blocks = new List<Payload.Block>
                                 {
-                                    new Payload.Block
+                                    new Payload.HeaderBlock
                                     {
-                                        Type = "header",
                                         Text = new Payload.TextObject
                                                {
                                                    Type = "plain_text",
                                                    Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}"
                                                }
                                     },
-                                    new Payload.Block
-                                    {
-                                        Type = "section",
-                                        Text = new Payload.TextObject { Type = "mrkdwn", Text = $"```\n{renderedMessage}\n```" }
-                                    }
+                                    new Payload.MarkdownBlock { Text = $"```\n{renderedMessage}\n```" }
                                 }
                    };
         }
