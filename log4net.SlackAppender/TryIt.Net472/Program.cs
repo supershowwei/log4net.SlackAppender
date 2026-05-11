@@ -23,10 +23,8 @@ namespace TryIt.Net472
 
             while ((cmd = Console.ReadLine()) != "q")
             {
-                //log.InfoFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
-                //log.WarnFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
-                //log.ErrorFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
-                //log.FatalFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
+                log.InfoFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
+                log.WarnFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
 
                 var msg = @"The network path was not found
    at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
@@ -53,6 +51,8 @@ ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:53,State:0,Class:20";
 
                 log.Error(msg);
+
+                log.FatalFormat("TEST: {0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
             }
         }
     }
