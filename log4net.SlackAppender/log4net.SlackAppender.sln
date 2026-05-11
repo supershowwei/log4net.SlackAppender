@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.Net47
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.SlackAppender.NETStandard20", "log4net.SlackAppender.NETStandard20\log4net.SlackAppender.NETStandard20.csproj", "{95E02BFD-4170-4A8A-83F3-569FF8FB5313}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TryIt.Net472", "TryIt.Net472\TryIt.Net472.csproj", "{3FA6F0CA-712A-4E84-AC1B-8B86B46EE516}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{95E02BFD-4170-4A8A-83F3-569FF8FB5313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E02BFD-4170-4A8A-83F3-569FF8FB5313}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E02BFD-4170-4A8A-83F3-569FF8FB5313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA6F0CA-712A-4E84-AC1B-8B86B46EE516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA6F0CA-712A-4E84-AC1B-8B86B46EE516}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA6F0CA-712A-4E84-AC1B-8B86B46EE516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA6F0CA-712A-4E84-AC1B-8B86B46EE516}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
