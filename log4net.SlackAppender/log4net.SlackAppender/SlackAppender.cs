@@ -53,21 +53,15 @@ namespace log4net.Appender
             var emoji = GetEmoji(loggingEvent.Level);
             var renderedMessage = this.RenderLoggingEvent(loggingEvent);
 
+            var header = $"{emoji} {loggingEvent.Level.DisplayName} from {loggingEvent.LoggerName} in {GlobalContext.Properties["ApplicationName"]} on {GlobalContext.Properties["log4net:HostName"]}";
+
             return new Payload
                    {
                        Channel = this.Channel,
-                       Username = $"{GlobalContext.Properties["log4net:HostName"]}.{GlobalContext.Properties["ApplicationName"]}",
-                       Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}\n{renderedMessage.SmsTruncate()}",
+                       Text = $"{header}\n{renderedMessage.SmsTruncate()}",
                        Blocks = new List<Payload.Block>
                                 {
-                                    new Payload.HeaderBlock
-                                    {
-                                        Text = new Payload.TextObject
-                                               {
-                                                   Type = "plain_text",
-                                                   Text = $"{emoji} {loggingEvent.Level.DisplayName} on {loggingEvent.LoggerName}"
-                                               }
-                                    },
+                                    new Payload.HeaderBlock { Text = new Payload.TextObject { Type = "plain_text", Text = header } },
                                     new Payload.MarkdownBlock { Text = $"```\n{renderedMessage}\n```" }
                                 }
                    };
