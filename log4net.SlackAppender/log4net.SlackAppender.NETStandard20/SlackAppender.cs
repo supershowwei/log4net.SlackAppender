@@ -12,11 +12,11 @@ namespace log4net.Appender
     {
         private static readonly Uri ApiUri = new Uri("https://slack.com/api/chat.postMessage");
 
-        private static readonly JsonSerializerOptions SlackJsonSettings = new JsonSerializerOptions
-                                                                          {
-                                                                              PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                                                              Converters = { new BlockConverter() }
-                                                                          };
+        private static readonly JsonSerializerOptions SlackJsonOptions = new JsonSerializerOptions
+                                                                         {
+                                                                             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                                                             Converters = { new BlockConverter() }
+                                                                         };
 
         public string Token { get; set; }
 
@@ -26,7 +26,7 @@ namespace log4net.Appender
         {
             var payload = this.GeneratePayload(loggingEvent);
 
-            var json = JsonSerializer.Serialize<object>(payload, SlackJsonSettings);
+            var json = JsonSerializer.Serialize<object>(payload, SlackJsonOptions);
 
             var request = new HttpRequestMessage(HttpMethod.Post, ApiUri.PathAndQuery)
                           {
