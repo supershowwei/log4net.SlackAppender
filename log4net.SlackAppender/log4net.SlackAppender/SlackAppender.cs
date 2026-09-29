@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using log4net.Core;
 using log4net.SlackAppender;
+using log4net.Util;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
 
@@ -42,7 +44,12 @@ namespace log4net.Appender
 
             request.AddParameter("application/json; charset=utf-8", JsonConvert.SerializeObject(payload, SlackJsonSettings), ParameterType.RequestBody);
 
-            client.Execute(request);
+            var response = client.Execute(request);
+
+            if (!IsSuccess(response))
+            {
+                LogLog.Debug(typeof(SlackAppender), $"Failed to post message to Slack. ResponseStatus={response.ResponseStatus}, StatusCode={(int)response.StatusCode}, Content={response.Content}", response.ErrorException);
+            }
         }
 
         private static string GetEmoji(Level level)
@@ -53,6 +60,20 @@ namespace log4net.Appender
                 case "error": return ":rotating_light:";
                 case "fatal": return ":fire:";
                 default: return ":information_source:";
+            }
+        }
+
+        private static bool IsSuccess(IRestResponse response)
+        {
+            if (!response.IsSuccessful) return false;
+
+            try
+            {
+                return (bool?)JObject.Parse(response.Content)["ok"] == true;
+            }
+            catch (JsonException)
+            {
+                return false;
             }
         }
 
