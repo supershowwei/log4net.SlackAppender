@@ -6,8 +6,13 @@ using log4net.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+#if NET452
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+#else
 using RestSharp;
-
+#endif
 namespace log4net.Appender
 {
     public class SlackAppender : AppenderSkeleton
@@ -23,33 +28,53 @@ namespace log4net.Appender
         public string Token { get; set; }
 
         public string Channel { get; set; }
-
 #if NET452
-        static SlackAppender()
-        {
-            // .NET Framework 4.5.2 預設僅啟用 SSL3 / TLS 1.0，Slack API 要求 TLS 1.2
-            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
-        }
+        // 2012R2 SChannel 缺 Slack 要求的 cipher suite，改由 BouncyCastle 處理 TLS
+        private static readonly HttpClient HttpClient = new HttpClient(new BouncyCastleHttpHandler());
 #endif
-
         protected override void Append(LoggingEvent loggingEvent)
         {
+            var payload = this.GeneratePayload(loggingEvent);
+            var json = JsonConvert.SerializeObject(payload, SlackJsonSettings);
+
+#if NET452
+            try
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Post, ApiUri) { Content = new StringContent(json, Encoding.UTF8, "application/json") })
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
+
+                    using (var response = HttpClient.SendAsync(request).GetAwaiter().GetResult())
+                    {
+                        var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                        if (!IsSuccess(response.IsSuccessStatusCode, content))
+                        {
+                            LogLog.Debug(typeof(SlackAppender), $"Failed to post message to Slack. StatusCode={(int)response.StatusCode}, Content={content}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // TLS 交握失敗、憑證驗證失敗、Socket 逾時等都會走到這裡
+                LogLog.Debug(typeof(SlackAppender), "Failed to post message to Slack.", ex);
+            }
+#else
             var client = new RestClient(ApiUri.GetLeftPart(UriPartial.Authority));
 
             var request = new RestRequest(ApiUri.PathAndQuery, Method.POST);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddHeader("Authorization", $"Bearer {this.Token}");
-
-            var payload = this.GeneratePayload(loggingEvent);
-
-            request.AddParameter("application/json; charset=utf-8", JsonConvert.SerializeObject(payload, SlackJsonSettings), ParameterType.RequestBody);
+            request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
 
             var response = client.Execute(request);
 
-            if (!IsSuccess(response))
+            if (!IsSuccess(response.IsSuccessful, response.Content))
             {
                 LogLog.Debug(typeof(SlackAppender), $"Failed to post message to Slack. ResponseStatus={response.ResponseStatus}, StatusCode={(int)response.StatusCode}, Content={response.Content}", response.ErrorException);
             }
+#endif
         }
 
         private static string GetEmoji(Level level)
@@ -63,13 +88,13 @@ namespace log4net.Appender
             }
         }
 
-        private static bool IsSuccess(IRestResponse response)
+        private static bool IsSuccess(bool isHttpSuccess, string content)
         {
-            if (!response.IsSuccessful) return false;
+            if (!isHttpSuccess || string.IsNullOrEmpty(content)) return false;
 
             try
             {
-                return (bool?)JObject.Parse(response.Content)["ok"] == true;
+                return (bool?)JObject.Parse(content)["ok"] == true;
             }
             catch (JsonException)
             {
