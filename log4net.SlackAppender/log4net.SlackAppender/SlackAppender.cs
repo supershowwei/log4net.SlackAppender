@@ -22,6 +22,14 @@ namespace log4net.Appender
 
         public string Channel { get; set; }
 
+#if NET452
+        static SlackAppender()
+        {
+            // .NET Framework 4.5.2 預設僅啟用 SSL3 / TLS 1.0，Slack API 要求 TLS 1.2
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+        }
+#endif
+
         protected override void Append(LoggingEvent loggingEvent)
         {
             var client = new RestClient(ApiUri.GetLeftPart(UriPartial.Authority));
